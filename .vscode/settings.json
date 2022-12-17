@@ -1,0 +1,32 @@
+{
+    "css.validate":false,
+    "less.validate":false,
+    "scss.validate":false,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true,
+      "source.fixAll.stylelint": true
+    },
+    "editor.tabSize": 2,
+    "files.autoSave": "afterDelay",
+    "editor.guides.bracketPairs": "active",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "[graphql]": {
+      "editor.formatOnSave": true
+    },
+      "[javascript]": { "editor.formatOnSave": true
+    },
+      "[javascriptreact]": {
+      "editor.formatOnSave": true
+    },
+      "[json]": {
+        "editor.formatOnSave": true
+      }, "[typescript]": {
+        "editor.formatOnSave": true
+      },
+      "[typescriptreact]": {
+        "editor.formatOnSave": true
+      },
+    "editor.formatOnSave": false,
+    "eslint.packageManager": "npm",
+    "typescript.enablePromptUseWorkspaceTsdk": true
+}
