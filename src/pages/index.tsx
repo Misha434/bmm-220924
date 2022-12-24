@@ -1,9 +1,26 @@
+import fs from "fs";
 import { css } from "@emotion/react";
+import matter from "gray-matter";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { baseStyles } from "./_app";
 import defalutImage from "assets/bmm-article-default.webp";
+
+export interface IFrontMatter {
+  title: string;
+  date: string;
+  description: string;
+}
+
+export interface IPost {
+  frontMatter: IFrontMatter;
+  slug: string;
+}
+
+interface Props {
+  posts: IPost[];
+}
 
 const styles = {
   heroHeader: {
@@ -82,7 +99,24 @@ const styles = {
   },
 };
 
-const Home: NextPage = () => {
+export const getStaticProps = () => {
+  const files = fs.readdirSync("src/posts");
+  const posts = files.map((fileName) => {
+    const slug = fileName.replace(/\.md$/, "");
+    const fileContent = fs.readFileSync(`src/posts/${fileName}`, "utf-8");
+    const { data } = matter(fileContent);
+
+    return {
+      frontMatter: data,
+      slug,
+    };
+  });
+  return {
+    props: { posts },
+  };
+};
+
+const Home: NextPage<Props> = ({ posts }: Props) => {
   return (
     <div>
       <Head>
@@ -105,25 +139,33 @@ const Home: NextPage = () => {
             <h2 css={styles.posts.heading}>
               POSTS <span>投稿一覧</span>
             </h2>
-
             <div css={styles.articles.container}>
-              <article css={styles.article.container}>
-                <Link href="#">
-                  <>
-                    <figure>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={defalutImage.src}
-                        alt="article-image"
-                        width={300}
-                        height={200}
-                      />
-                    </figure>
-                    <h3>title</h3>
-                    <p>summary</p>
-                  </>
-                </Link>
-              </article>
+              {posts.map((post) => (
+                <article css={styles.article.container} key={post.slug}>
+                  <Link
+                    href={{
+                      pathname: "/posts/[id]",
+                      query: {
+                        id: post.slug,
+                      },
+                    }}
+                  >
+                    <>
+                      <figure>
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={defalutImage.src}
+                          alt="article-image"
+                          width={300}
+                          height={200}
+                        />
+                      </figure>
+                      <h3>{post.frontMatter?.title}</h3>
+                      <p>{post.frontMatter?.description}</p>
+                    </>
+                  </Link>
+                </article>
+              ))}
             </div>
           </div>
         </section>

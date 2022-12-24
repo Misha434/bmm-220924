@@ -12,15 +12,23 @@
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "gray-matter": "^4.0.3",
     "next": "12.3.1",
     "normalize.css": "^8.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1",
-    "react-modern-drawer": "^1.1.2"
+    "react-modern-drawer": "^1.1.2",
+    "rehype-stringify": "^9.0.3",
+    "remark-parse": "^10.0.1",
+    "remark-rehype": "^10.1.0",
+    "unified": "^10.1.2"
   },
   "devDependencies": {
+    "@types/eslint": "^8.4.10",
+    "@types/eslint-plugin-prettier": "^3.1.0",
     "@types/node": "18.7.19",
+    "@types/prettier": "^2.7.2",
     "@types/react": "18.0.21",
     "@types/react-dom": "18.0.6",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
