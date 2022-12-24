@@ -12,14 +12,15 @@
     ],
   "rules": {
     "react/react-in-jsx-scope": "off",
+    "react/no-unknown-property": ["error", { "ignore": ["css"] }],
     "import/order": [2, { "alphabetize": { "order": "asc" } }],
     "prettier/prettier": [
       "error", 
         {
           "trailingComma": "all",
           "endOfLine": "lf",
-          "semi": false,
-          "singleQuote": true,
+          // "semi": false,
+          // "singleQuote": true,
           "printWidth": 80,
           "tabWidth": 2
         }
