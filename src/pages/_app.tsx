@@ -6,6 +6,7 @@ import { css } from "@emotion/react";
 import type { AppProps } from "next/app";
 import Link from "next/link";
 import { useState } from "react";
+import { AiOutlineMenu } from "react-icons/ai";
 // import component 👇
 import Drawer from "react-modern-drawer";
 import BMMLogo from "assets/bmm-logo.png";
@@ -40,7 +41,13 @@ const styles = {
   `,
   bargerMenu: css`
     width: 20px;
-    color: gray;
+    padding: 0;
+    outline: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #aaa;
+    font-size: 30px;
   `,
   headerLink: css`
     margin: 16px 0;
@@ -65,8 +72,10 @@ function MyApp({ Component, pageProps }: AppProps) {
           <div css={styles.logo}>
             <HeaderLogo />
           </div>
-          <div css={styles.bargerMenu}>
-            <button onClick={toggleDrawer}>x</button>
+          <div>
+            <button css={styles.bargerMenu} onClick={toggleDrawer}>
+              <AiOutlineMenu />
+            </button>
             <Drawer open={isOpen} onClose={toggleDrawer} direction="right">
               <div>Hello World</div>
               <ol>
