@@ -51,9 +51,9 @@ const styles = {
       padding-top: 30px;
     `,
     heading: css`
-      font-size: 2rem;
+      /* font-size: 2rem; */
       min-height: 0vw;
-      font-weight: 300;
+      /* font-weight: 300; */
       > span {
         display: block;
         font-size: 1.4rem;
@@ -63,37 +63,39 @@ const styles = {
   },
   articles: {
     container: css`
-      display: grid;
       padding: 20px 0;
-      gap: 32px 25px;
-      grid-template-columns: repeat(3, 1fr);
-
-      @media (max-width: 768px) {
-        grid-template-columns: repeat(2, 1fr);
-      }
     `,
   },
   article: {
     container: css`
-      > img {
-        aspect-ratio: 3 / 2;
-        object-fit: cover;
+      display: flex;
+      > figure {
         width: 100%;
+        max-width: 180px;
       }
       > h3 {
         margin: 1em 0 0.5em;
-        font-size: clamp(12px, 2vw, 20px);
-        min-height: 0vw;
       }
       > p {
         max-width: 20em;
-        font-size: clamp(10px, 2vw, 14px);
-        min-height: 0vw;
       }
-      @supports not (aspect-ratio: 3 / 2) {
-        > img {
-          height: 180px;
-        }
+    `,
+    image: css`
+      width: 100%;
+      @media (min-width: 400px) {
+        width: 50vw;
+        max-width: 300px;
+      }
+    `,
+    content: css`
+      display: flex;
+      @media (max-width: 400px) {
+        display: inline;
+      }
+    `,
+    textContainer: css`
+      @media (min-width: 400px) {
+        margin-left: 2rem;
       }
     `,
   },
@@ -149,20 +151,26 @@ const Home: NextPage<Props> = ({ posts }: Props) => {
                         id: post.slug,
                       },
                     }}
+                    passHref
                   >
-                    <>
-                      <figure>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={defalutImage.src}
-                          alt="article-image"
-                          width={300}
-                          height={200}
-                        />
-                      </figure>
-                      <h3>{post.frontMatter?.title}</h3>
-                      <p>{post.frontMatter?.description}</p>
-                    </>
+                    <a>
+                      <div css={styles.article.content}>
+                        <figure>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={defalutImage.src}
+                            alt="article-image"
+                            width="100%"
+                            height="calc(100% / 3)"
+                            css={styles.article.image}
+                          />
+                        </figure>
+                        <div css={styles.article.textContainer}>
+                          <h3>{post.frontMatter?.title}</h3>
+                          <p>{post.frontMatter?.description}</p>
+                        </div>
+                      </div>
+                    </a>
                   </Link>
                 </article>
               ))}
