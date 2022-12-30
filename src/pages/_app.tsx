@@ -2,6 +2,9 @@
 
 import "../styles/initialize.css";
 import "../styles/globals.css";
+import "../styles/prism-vsc-dark-plus.css";
+import "prismjs/plugins/line-numbers/prism-line-numbers.css";
+
 import { css } from "@emotion/react";
 import type { AppProps } from "next/app";
 import Link from "next/link";
@@ -38,6 +41,7 @@ const styles = {
   `,
   logo: css`
     margin-right: auto;
+    cursor: pointer;
   `,
   bargerMenu: css`
     width: 20px;
@@ -69,9 +73,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <header css={styles.header}>
         <div css={styles.headerContainer}>
-          <div css={styles.logo}>
-            <HeaderLogo />
-          </div>
+          <Link href={{ pathname: "/" }}>
+            <div css={styles.logo}>
+              <HeaderLogo />
+            </div>
+          </Link>
           <div>
             <button css={styles.bargerMenu} onClick={toggleDrawer}>
               <AiOutlineMenu />

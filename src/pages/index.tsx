@@ -1,9 +1,26 @@
+import fs from "fs";
 import { css } from "@emotion/react";
+import matter from "gray-matter";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
 import { baseStyles } from "./_app";
 import defalutImage from "assets/bmm-article-default.webp";
+
+export interface IFrontMatter {
+  title: string;
+  date: string;
+  description: string;
+}
+
+export interface IPost {
+  frontMatter: IFrontMatter;
+  slug: string;
+}
+
+interface Props {
+  posts: IPost[];
+}
 
 const styles = {
   heroHeader: {
@@ -34,9 +51,9 @@ const styles = {
       padding-top: 30px;
     `,
     heading: css`
-      font-size: 2rem;
+      /* font-size: 2rem; */
       min-height: 0vw;
-      font-weight: 300;
+      /* font-weight: 300; */
       > span {
         display: block;
         font-size: 1.4rem;
@@ -46,43 +63,62 @@ const styles = {
   },
   articles: {
     container: css`
-      display: grid;
       padding: 20px 0;
-      gap: 32px 25px;
-      grid-template-columns: repeat(3, 1fr);
-
-      @media (max-width: 768px) {
-        grid-template-columns: repeat(2, 1fr);
-      }
     `,
   },
   article: {
     container: css`
-      > img {
-        aspect-ratio: 3 / 2;
-        object-fit: cover;
+      display: flex;
+      > figure {
         width: 100%;
+        max-width: 180px;
       }
       > h3 {
         margin: 1em 0 0.5em;
-        font-size: clamp(12px, 2vw, 20px);
-        min-height: 0vw;
       }
       > p {
         max-width: 20em;
-        font-size: clamp(10px, 2vw, 14px);
-        min-height: 0vw;
       }
-      @supports not (aspect-ratio: 3 / 2) {
-        > img {
-          height: 180px;
-        }
+    `,
+    image: css`
+      width: 100%;
+      @media (min-width: 400px) {
+        width: 50vw;
+        max-width: 300px;
+      }
+    `,
+    content: css`
+      display: flex;
+      @media (max-width: 400px) {
+        display: inline;
+      }
+    `,
+    textContainer: css`
+      @media (min-width: 400px) {
+        margin-left: 2rem;
       }
     `,
   },
 };
 
-const Home: NextPage = () => {
+export const getStaticProps = () => {
+  const files = fs.readdirSync("src/posts");
+  const posts = files.map((fileName) => {
+    const slug = fileName.replace(/\.md$/, "");
+    const fileContent = fs.readFileSync(`src/posts/${fileName}`, "utf-8");
+    const { data } = matter(fileContent);
+
+    return {
+      frontMatter: data,
+      slug,
+    };
+  });
+  return {
+    props: { posts },
+  };
+};
+
+const Home: NextPage<Props> = ({ posts }: Props) => {
   return (
     <div>
       <Head>
@@ -105,25 +141,39 @@ const Home: NextPage = () => {
             <h2 css={styles.posts.heading}>
               POSTS <span>投稿一覧</span>
             </h2>
-
             <div css={styles.articles.container}>
-              <article css={styles.article.container}>
-                <Link href="#">
-                  <>
-                    <figure>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={defalutImage.src}
-                        alt="article-image"
-                        width={300}
-                        height={200}
-                      />
-                    </figure>
-                    <h3>title</h3>
-                    <p>summary</p>
-                  </>
-                </Link>
-              </article>
+              {posts.map((post) => (
+                <article css={styles.article.container} key={post.slug}>
+                  <Link
+                    href={{
+                      pathname: "/posts/[id]",
+                      query: {
+                        id: post.slug,
+                      },
+                    }}
+                    passHref
+                  >
+                    <a>
+                      <div css={styles.article.content}>
+                        <figure>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={defalutImage.src}
+                            alt="article-image"
+                            width="100%"
+                            height="calc(100% / 3)"
+                            css={styles.article.image}
+                          />
+                        </figure>
+                        <div css={styles.article.textContainer}>
+                          <h3>{post.frontMatter?.title}</h3>
+                          <p>{post.frontMatter?.description}</p>
+                        </div>
+                      </div>
+                    </a>
+                  </Link>
+                </article>
+              ))}
             </div>
           </div>
         </section>
