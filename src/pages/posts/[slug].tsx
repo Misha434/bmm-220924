@@ -22,6 +22,7 @@ const styles = {
   `,
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getStaticProps = async ({ params }: any) => {
   const file = fs.readFileSync(`src/posts/${params.slug}.md`, "utf-8");
   const { data, content } = matter(file);
